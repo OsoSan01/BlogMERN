@@ -23,7 +23,7 @@ const Header = () => {
     <>
     <AppBar position='sticky'>
         <Toolbar>
-            <Typography variant='h4' > 
+            <Typography variant='h4' fontFamily={'Khula'} color="#7AB7A8"> 
                 The Hungry Panda Blog
             </Typography>
             { isLogin && ( //rendering condition if a user is logged in
