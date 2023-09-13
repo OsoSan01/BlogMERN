@@ -127,19 +127,26 @@ exports.getPostId = async(req, res) => {
 };
 
 //DELETE ONE POST
-exports.deletePost = async(req, res) => {
+exports.deletePost = async (req, res) => {
     try {
-        await Post.findOneAndDelete(req.params.id)
-        return res.status(200).send({
-            succes: true,
-            message: "Post Deleted"
-        });
-    }catch(error) {
-        console.log(error)
-        return res.status(500).send({
-            success: false,
-            message: "Error Deleting the Requested Post",
-            error
-        });
-    };
-};
+      const post = await Post
+        .findOneAndDelete(req.params.id)
+        // .findByIdAndDelete(req.params.id)
+        .populate("user");
+        console.log(post.user);
+      await post.user.post.pull(post);
+      await post.user.save();
+      return res.status(200).send({
+        success: true,
+        message: "Post Deleted!",
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).send({
+        success: false,
+        message: "Erorr WHile Deleteing Post",
+        error,
+      });
+    }
+  };
+  
