@@ -5,6 +5,7 @@ const {
     updatePost, 
     getPostId, 
     deletePost,
+    userPosts,
     } = require("../controllers/postController");
 
 //note to myself. lay down all routes first, kind of a layout of all the urls I'm planning on use/have
@@ -30,6 +31,10 @@ router.get("/get-post/:id", getPostId)
 
 //DELETE request, delete a post
 router.delete("/delete-post/:id", deletePost)
+
+//GET request for the post of a certain user
+router.get('/user-posts/:id', userPosts);
+
 
 module.exports = router;
 

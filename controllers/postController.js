@@ -147,6 +147,32 @@ exports.deletePost = async (req, res) => {
         message: "Erorr WHile Deleteing Post",
         error,
       });
-    }
+    };
   };
   
+
+  //RETREIVE USER'S POSTS
+  exports.userPosts = async (req, res) => {
+    try{
+        const userPost = await User.findById(req.params.id).populate('post');
+        //validation
+        if(!userPost){
+            return res.status(404).send({
+                succes: false,
+                message: "User Has no Posts Yet"
+            });
+        };
+        return res.status(200).send({
+            succes: true,
+            message: "User's Posts",
+            userPost,
+        });
+    }catch(error){
+        console.log(error);
+        return res.status(400).send({
+            success: false,
+            message: "Erorr Getting User's Posts",
+            error,
+          });
+    };
+  };
