@@ -6,7 +6,7 @@ import { createSlice, configureStore } from "@reduxjs/toolkit";
 const authSlice = createSlice ({
     name: "auth",
     initialState: {
-        isLogin: false
+        isLogin: true
     },
     reducers: {
         login(state){

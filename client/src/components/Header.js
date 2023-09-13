@@ -1,23 +1,40 @@
-import { 
-    AppBar, 
-    Box, 
-    Toolbar, 
-    Button, 
-    Typography, 
-    Tabs, 
-    Tab  } from '@mui/material'
-import React, {useState} from 'react'
-import { Link } from 'react-router-dom' //creating the links to be followed when clicking
-import { useSelector } from 'react-redux'
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  AppBar,
+  Toolbar,
+  Button,
+  Typography,
+  Tabs,
+  Tab,
+} from "@mui/material";
+import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { auth } from "../redux/store";
+import toast from "react-hot-toast";
 
 
 const Header = () => {
-    //global state
-    const isLogin = useSelector(state => state.isLogin);
-    console.log(isLogin)
-    
-    //state
-    const [value, setvalue] = useState()
+  // global state
+  let isLogin = useSelector((state) => state.isLogin);
+  isLogin = isLogin || localStorage.getItem("userId");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  //state
+  const [value, setValue] = useState();
+
+  //logout
+  const handleLogout = () => {
+    try {
+      dispatch(auth.logout());
+      toast.success("Logout Successfully");
+      navigate("/login");
+      localStorage.clear();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -28,7 +45,7 @@ const Header = () => {
             </Typography>
             { isLogin && ( //rendering condition if a user is logged in
                 <Box display={'flex'} marginLeft='auto' marginRight={'auto'}>
-                    <Tabs textColor='inherit' value={value} onChange={(evt, value) => setvalue(value) }>
+                    <Tabs textColor='inherit' value={value} onChange={(evt, value) => setValue(value) }>
                         <Tab label="Posts" LinkComponent={Link} to="/posts" />
                         <Tab label="My Posts" LinkComponent={Link} to="/my-posts" />
                     </Tabs>
@@ -42,7 +59,7 @@ const Header = () => {
                     </>
                 )}
                 {isLogin && (
-                    <Button sx={{margin:1, color: "white" }}>Logout</Button>
+                    <Button onClick={handleLogout} sx={{margin:1, color: "white" }}>Logout</Button>
                 )}
             </Box>
         </Toolbar>
